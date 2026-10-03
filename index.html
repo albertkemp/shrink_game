@@ -6,11 +6,16 @@
         const h = 75;
         const margin = 200;
         const enmargin = 100;
-        const jumpv = 25;
+        const jumpv = 20;
+        let points = 0;
+        let count = 0;
+        let gameState = "playing";
         let gnd = innerHeight;
+        let space = true;
         let player = {width: 75, height: h, x: 500, y: innerHeight-h-margin, upv: 0};
-        let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight - enmargin, type: ""};
-        //maybe we list the enemies and then for each of them we spawn them in?
+        //let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight, type: ""};
+        let enemies = [{width: 200, height: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight), type: ""}, {width: 200, height: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight), type: ""}, {width: 100, height: 200, x: innerWidth + Math.random()*8000, y: Math.random()*(innerHeight), type: ""}, {width: 300, height: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: "star"}];
+        const playagain = {x: innerWidth/2, y: innerHeight/2 + 50, width: 200, height: 100};
         const speed = 500;
         //this is the cool drawing function
         function draw(time) {
@@ -18,46 +23,128 @@
             ctx.fillRect(0, 0, innerWidth, innerHeight);
             ctx.fillStyle = "red";
             ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillRect(enemy.x, enemy.y, 500, enemy.height);
-            enemy.type = "gnd";
-            //here we are drawing the enemy using the enemie's current coords
-            //if (time % 20 == 0) {
-                // for every 20th time it has to draw something new bUT HOW??
-            //}
+            for (let i in enemies) {
+                ctx.fillStyle = "red";
+                const enemy = enemies[i];
+                ctx.fillStyle = "white";
+                if (enemy.type == "star") {
+                    ctx.fillStyle = "yellow";
+                }
+                
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                ctx.fillStyle = "red";
+                ctx.font = "bold 48px serif";
+                if (enemy.type != "star") {
+                    ctx.fillText("(:<", enemy.x, enemy.y+50);
+                }
+                ctx.font = "48px serif";
+            }
+            ctx.fillStyle = "black";
+            ctx.fillRect(player.x+20, player.y+25, 10, 10);
+            ctx.fillRect(player.x+player.width-30, player.y + 25, 10, 10);
+            ctx.fillRect(player.x, player.y, 7, 7);
+            ctx.fillRect(player.x+player.width-7, player.y, 7, 7);
+            ctx.fillRect(player.x, player.y+player.height-7, 7, 7);
+            ctx.fillRect(player.x+player.width-7, player.y+player.height-7, 7, 7);
+
+            if (gameState == "end") {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, innerWidth, innerHeight);
+                ctx.fillStyle = "red";
+                ctx.font = "48px serif";
+                ctx.fillText("Oops.", innerWidth/2, innerHeight/2);
+                ctx.fillStyle = "white";
+                ctx.fillRect(playagain.x, playagain.y, playagain.width, playagain.height);
+                ctx.fillStyle = "red";
+                ctx.font = "30px serif";
+                ctx.fillText("Play again", innerWidth/2, innerHeight/2+100);
+            }
+            if (space) {
+                ctx.fillStyle = "white";
+                ctx.font = "48px serif";
+                ctx.fillText("space/w/up/click", innerWidth/2, innerHeight/2);
+            }
+            ctx.fillStyle = "white";
+            ctx.fillText(points, 50, 50);
+            
         }
         
         function move(dt) {
-            player.y += -(player.upv);
+            if (gameState == "playing") {
+                            player.y += -(player.upv);
             //gravity:
             player.upv -=1;
-            enemy.x = (enemy.x - speed * dt);
-            if (player.x > enemy.x && player.x + player.width < enemy.x + enemy.width && enemy.type == "gnd") {
-                gnd = enemy.y;
-            } else {gnd = innerHeight}
+            for (let i in enemies) {
+                let enemy = enemies[i];
+                enemy.x = (enemy.x - speed * dt);
+                
             if (enemy.x + enemy.width < 0) {
                 enemy.x = innerWidth;
+                count++;
+                if (count % 6 == 0) {
+                    count = 0;
+                    enemies = [{width: 200, height: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight), type: ""}, {width: 200, height: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight), type: ""}, {width: 100, height: 200, x: innerWidth + Math.random()*8000, y: Math.random()*(innerHeight), type: ""}, {width: 300, height: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: "star"}];
+                }  
             }
+              if (istouching(player, enemy)) {
+                if (enemy.type == "star") {
+                    points++;
+                } else {
+                space = false;
+                gameState = "end";
+                }
+                
+            }
+            }
+            
+            
             if (player.y + player.height > gnd) {
+                //rng
+                player.y -= 10;
+                
+                player.upv *= -4/5;
                 player.y = innerHeight - player.height;
+                
+            } else if (player.y < 0) {
+                player.y += 10;
+                player.upv *= -1/2;
+                player.y = 0;
+            }
+          
             }
         }
-        /*
-        function spawn_enemy() {
-            //use rng here
-            ctx.fillstyle = "yellow";
-            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-        }*/
+        function istouching(r1, r2) {
+            //a and b are just x and y for the second entity
+            if (r1.x + r1.width < r2.x || r1.y + r1.height < r2.y || r1.x > r2.x + r2.height || r1.y > r2.y + r2.height) {
+                return false;
+            } else {
+                return true;
+            }
+        }
        function jump() {
         player.upv = jumpv;
        }
         window.addEventListener('keydown', (event) => {
             if (event.code == 'Space' || event.code == 'KeyW' || event.code == 'ArrowUp') {
-                event.preventDefault();
-                jump();
-            }
+                if (gameState == "playing") event.preventDefault();
+                if (gameState == "end") location.reload();
+                space = false;
+                //if (player.y + player.height >= innerHeight-5) {
+                    jump();
+                //}
+                
+            } /* else if (event.code == 'ArrowLeft' || event.code == 'KeyA') {
+                even
+            } */
         });
         window.addEventListener('click', (event) => {
+            //if (player.y + player.height >= innerHeight-5) {
+            space = false;
             jump();
+            if (gameState == "end" && event.offsetX > playagain.x && event.offsetX < playagain.x+playagain.width && event.offsetY > playagain.y && event.offsetY < playagain.y + playagain.height) {
+                location.reload();
+            }
+            //}
         });
         onresize = () => {
             c.width = innerWidth;
