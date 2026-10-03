@@ -1,0 +1,79 @@
+<body>
+    
+    <canvas id="c"></canvas>
+    <script>
+        const ctx = c.getContext("2d");
+        const h = 75;
+        const margin = 200;
+        const enmargin = 100;
+        const jumpv = 25;
+        let gnd = innerHeight;
+        let player = {width: 75, height: h, x: 500, y: innerHeight-h-margin, upv: 0};
+        let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight - enmargin, type: ""};
+        //maybe we list the enemies and then for each of them we spawn them in?
+        const speed = 500;
+        //this is the cool drawing function
+        function draw(time) {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, innerWidth, innerHeight);
+            ctx.fillStyle = "red";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillRect(enemy.x, enemy.y, 500, enemy.height);
+            enemy.type = "gnd";
+            //here we are drawing the enemy using the enemie's current coords
+            //if (time % 20 == 0) {
+                // for every 20th time it has to draw something new bUT HOW??
+            //}
+        }
+        
+        function move(dt) {
+            player.y += -(player.upv);
+            //gravity:
+            player.upv -=1;
+            enemy.x = (enemy.x - speed * dt);
+            if (player.x > enemy.x && player.x + player.width < enemy.x + enemy.width && enemy.type == "gnd") {
+                gnd = enemy.y;
+            } else {gnd = innerHeight}
+            if (enemy.x + enemy.width < 0) {
+                enemy.x = innerWidth;
+            }
+            if (player.y + player.height > gnd) {
+                player.y = innerHeight - player.height;
+            }
+        }
+        /*
+        function spawn_enemy() {
+            //use rng here
+            ctx.fillstyle = "yellow";
+            ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        }*/
+       function jump() {
+        player.upv = jumpv;
+       }
+        window.addEventListener('keydown', (event) => {
+            if (event.code == 'Space' || event.code == 'KeyW' || event.code == 'ArrowUp') {
+                event.preventDefault();
+                jump();
+            }
+        });
+        window.addEventListener('click', (event) => {
+            jump();
+        });
+        onresize = () => {
+            c.width = innerWidth;
+            c.height = innerHeight;
+            draw();
+        }
+        onresize();
+        let last = 0;
+        function frame(now) {
+            move(Math.min((now-last) / 1000, 0.1));
+            last = now;
+            draw(now);
+            requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+        
+        
+    </script>
+</body>
