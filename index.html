@@ -14,6 +14,7 @@
         let gnd = innerHeight;
         let space = true;
         let quota = 0;
+        let down = false;
         let player = {width: 75, height: h, x: 500, y: innerHeight-h-margin, upv: 0};
         //let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight, type: ""};
         let enemies = [{width: 200, height: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight), type: ""}, {width: 200, height: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight), type: ""}, {width: 100, height: 200, x: innerWidth + Math.random()*300, y: innerHeight-100, type: ""}, {width: 300, height: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight), type: "star"}];
@@ -60,6 +61,7 @@
                 ctx.fillStyle = "red";
                 ctx.font = "30px serif";
                 ctx.fillText("Play again", innerWidth/2, innerHeight/2+100);
+                ctx.font = "48px serif";
             }
             if (space) {
                 ctx.fillStyle = "white";
@@ -67,6 +69,8 @@
                 ctx.fillText("space/w/up/click", innerWidth/2, innerHeight/2);
             }
             ctx.fillStyle = "white";
+            const high = localStorage.getItem("score");
+            ctx.fillText(high, 100, 50);
             ctx.fillText(points, 50, 50);
             
         }
@@ -92,6 +96,9 @@
                 if (enemy.type == "star") {
                     if (!touchingstar) {
                         points++;
+                        if (points > localStorage.getItem("score")) {
+                            localStorage.setItem("score", points);
+                        }
                         touchingstar = true;
                         enemy.x = innerWidth + Math.random()*500;
                     }
@@ -143,12 +150,20 @@
                 if (gameState == "end") location.reload();
                 space = false;
                 //if (player.y + player.height >= innerHeight-5) {
+                if(!down) {
                     jump();
+                    down = true;
+                }
                 //}
                 
             } /* else if (event.code == 'ArrowLeft' || event.code == 'KeyA') {
                 even
             } */
+        });
+        window.addEventListener('keyup', (event) => {
+             if (event.code == 'Space' || event.code == 'KeyW' || event.code == 'ArrowUp') {
+                down = false;
+            }
         });
         window.addEventListener('click', (event) => {
             //if (player.y + player.height >= innerHeight-5) {
