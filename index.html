@@ -39,15 +39,17 @@
             ctx.fillRect(0, 0, innerWidth, innerHeight);
             ctx.fillStyle = "red";
             ctx.fillRect(player.x, player.y, player.width, player.height);
+            /*
             ctx.fillStyle = "grey";
                 ctx.fillRect(player.x-40, player.y, 40, player.height);
-            for (let i in enemies) {
+            */for (let i in enemies) {
                 ctx.fillStyle = "red";
                 const enemy = enemies[i];
                 ctx.fillStyle = "white";
                 if (enemy.type == "star") {
                     ctx.fillStyle = "yellow";
                 }
+                /*
                 const topspikes = Math.floor(enemy.width/10);
                 const sideSpikes = Math.floor(enemy.height/10);
                 for (let i = 0; i < topspikes; i++) {
@@ -56,7 +58,7 @@
                 }
                 for (let i = 0; i < sideSpikes; i++) {
                     ctx.fillRect(enemy.x-10, enemy.y + 10*i, 10, 3);
-                }
+                }*/
                 ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
                 /*ctx.fillStyle = "red";
                 ctx.font = "bold 48px serif";*/
@@ -73,12 +75,13 @@
             ctx.fillRect(player.x+player.width-7, player.y, 7, 7);
             ctx.fillRect(player.x, player.y+player.height-7, 7, 7);
             ctx.fillRect(player.x+player.width-7, player.y+player.height-7, 7, 7);
+            /*
             if (thingy) {
                 
                 ctx.fillStyle = "orange";
                 ctx.fillRect(player.x-40, player.y+player.height, 40, 50);
                 ctx.fillRect(player.x-30, player.y + player.height+50, 20, 30);
-            }
+            }*/
             if (gameState == "end") {
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, innerWidth, innerHeight);
@@ -156,7 +159,7 @@
                 quota = 0;
                 player.y -= 10;
                 
-                player.upv *= -2/3;
+                player.upv *= -1/2;
                 player.y = innerHeight - player.height;
                 
             } else if (player.y < 0) {
