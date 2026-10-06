@@ -1,6 +1,6 @@
 <body>
     
-    <canvas id="c"></canvas>
+    <canvas id=c></canvas>
     <script>
         const ctx = c.getContext("2d");
         const h = 75;
@@ -27,10 +27,10 @@
         let space = true;
         let quota = 0;
         let down = false;
-        let player = {width: 75, height: h, x: 500, y: innerHeight-h-margin, upv: 0};
+        let player = {w: 75, h: h, x: 500, y: innerHeight-h-margin, upv: 0};
         //let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight, type: ""};
-        let enemies = [{width: 200, height: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight-100), type: ""}, {width: 200, height: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight-50), type: ""}, {width: 100, height: 200, x: innerWidth + Math.random()*300, y: innerHeight-100, type: ""}, {width: 300, height: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight-50), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight-150), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*500, y: Math.random()*(innerHeight-150), type: "star"}];
-        const playagain = {x: innerWidth/2, y: innerHeight/2 + 50, width: 200, height: 100};
+        let enemies = [{w: 200, h: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight-100), type: ""}, {w: 200, h: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight-50), type: ""}, {w: 100, h: 200, x: innerWidth + Math.random()*300, y: innerHeight-100, type: ""}, {w: 300, h: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight-50), type: ""}, {w: 50, h: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight-150), type: ""}, {w: 50, h: 150, x: innerWidth + Math.random()*500, y: Math.random()*(innerHeight-150), type: "star"}];
+        const playagain = {x: innerWidth/2, y: innerHeight/2 + 50, w: 200, h: 100};
         // CHANGE THIS TO CHANGE GAME SPEED
         const speed = 500;
         //this is the cool drawing function
@@ -38,10 +38,10 @@
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, innerWidth, innerHeight);
             ctx.fillStyle = "red";
-            ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillRect(player.x, player.y, player.w, player.h);
             /*
             ctx.fillStyle = "grey";
-                ctx.fillRect(player.x-40, player.y, 40, player.height);
+                ctx.fillRect(player.x-40, player.y, 40, player.h);
             */for (let i in enemies) {
                 ctx.fillStyle = "red";
                 const enemy = enemies[i];
@@ -50,16 +50,16 @@
                     ctx.fillStyle = "yellow";
                 }
                 /*
-                const topspikes = Math.floor(enemy.width/10);
-                const sideSpikes = Math.floor(enemy.height/10);
+                const topspikes = Math.floor(enemy.w/10);
+                const sideSpikes = Math.floor(enemy.h/10);
                 for (let i = 0; i < topspikes; i++) {
                     ctx.fillRect(enemy.x + 10 * i, enemy.y-10, 3, 10);
-                    ctx.fillRect(enemy.x + 10 * i, enemy.y+enemy.height, 3, 10);
+                    ctx.fillRect(enemy.x + 10 * i, enemy.y+enemy.h, 3, 10);
                 }
                 for (let i = 0; i < sideSpikes; i++) {
                     ctx.fillRect(enemy.x-10, enemy.y + 10*i, 10, 3);
                 }*/
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
                 /*ctx.fillStyle = "red";
                 ctx.font = "bold 48px serif";*/
                 /*
@@ -70,17 +70,17 @@
             }
             ctx.fillStyle = "black";
             ctx.fillRect(player.x+20, player.y+25, 10, 10);
-            ctx.fillRect(player.x+player.width-30, player.y + 25, 10, 10);
+            ctx.fillRect(player.x+player.w-30, player.y + 25, 10, 10);
             ctx.fillRect(player.x, player.y, 7, 7);
-            ctx.fillRect(player.x+player.width-7, player.y, 7, 7);
-            ctx.fillRect(player.x, player.y+player.height-7, 7, 7);
-            ctx.fillRect(player.x+player.width-7, player.y+player.height-7, 7, 7);
+            ctx.fillRect(player.x+player.w-7, player.y, 7, 7);
+            ctx.fillRect(player.x, player.y+player.h-7, 7, 7);
+            ctx.fillRect(player.x+player.w-7, player.y+player.h-7, 7, 7);
             /*
             if (thingy) {
                 
                 ctx.fillStyle = "orange";
-                ctx.fillRect(player.x-40, player.y+player.height, 40, 50);
-                ctx.fillRect(player.x-30, player.y + player.height+50, 20, 30);
+                ctx.fillRect(player.x-40, player.y+player.h, 40, 50);
+                ctx.fillRect(player.x-30, player.y + player.h+50, 20, 30);
             }*/
             if (gameState == "end") {
                 ctx.fillStyle = "black";
@@ -89,7 +89,7 @@
                 ctx.font = "48px serif";
                 ctx.fillText("Oops.", innerWidth/2, innerHeight/2);
                 ctx.fillStyle = "white";
-                ctx.fillRect(innerWidth/2, innerHeight/2+50, playagain.width, playagain.height);
+                ctx.fillRect(innerWidth/2, innerHeight/2+50, playagain.w, playagain.h);
                 ctx.fillStyle = "red";
                 ctx.font = "30px serif";
                 ctx.fillText("Play again", innerWidth/2, innerHeight/2+100);
@@ -116,7 +116,7 @@
                 let enemy = enemies[i];
                 enemy.x = (enemy.x - speed * dt);
                 
-            if (enemy.x + enemy.width < 0) {
+            if (enemy.x + enemy.w < 0) {
                 const n = Math.random()*3000;
                 if (enemy.type == "star") {
                     enemy.x = innerWidth + Math.random()*500;
@@ -124,7 +124,7 @@
                     enemy.x = innerWidth+Math.random()*n;
                 }
                 
-                enemy.y = Math.random()*(innerHeight-enemy.height);
+                enemy.y = Math.random()*(innerHeight-enemy.h);
                 count++;
                 /*
                 if (count % 6 == 0) {
@@ -154,13 +154,13 @@
             }
             
             
-            if (player.y + player.height > gnd) {
+            if (player.y + player.h > gnd) {
                 //rng
                 quota = 0;
                 player.y -= 10;
                 
                 player.upv *= -1/2;
-                player.y = innerHeight - player.height;
+                player.y = innerHeight - player.h;
                 
             } else if (player.y < 0) {
                 player.y += 10;
@@ -172,7 +172,7 @@
         }
         function istouching(r1, r2) {
             //a and b are just x and y for the second entity
-            if (r1.x + r1.width < r2.x || r1.y + r1.height < r2.y || r1.x > r2.x + r2.height || r1.y > r2.y + r2.height) {
+            if (r1.x + r1.w < r2.x || r1.y + r1.h < r2.y || r1.x > r2.x + r2.h || r1.y > r2.y + r2.h) {
                 return false;
             } else {
                 return true;
@@ -190,7 +190,7 @@
                 if (gameState == "playing") event.preventDefault();
                 if (gameState == "end") location.reload();
                 space = false;
-                //if (player.y + player.height >= innerHeight-5) {
+                //if (player.y + player.h >= innerHeight-5) {
                 if(!down) {
                     jump();
                     down = true;
@@ -208,10 +208,10 @@
             }
         });
         window.addEventListener('click', (event) => {
-            //if (player.y + player.height >= innerHeight-5) {
+            //if (player.y + player.h >= innerHeight-5) {
             space = false;
             jump();
-            if (gameState == "end" && event.offsetX > playagain.x && event.offsetX < playagain.x+playagain.width && event.offsetY > playagain.y && event.offsetY < playagain.y + playagain.height) {
+            if (gameState == "end" && event.offsetX > playagain.x && event.offsetX < playagain.x+playagain.w && event.offsetY > playagain.y && event.offsetY < playagain.y + playagain.h) {
                 location.reload();
             }
             //}
@@ -233,4 +233,3 @@
         
         
     </script>
-</body>
