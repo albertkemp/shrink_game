@@ -7,6 +7,18 @@
         const margin = 200;
         const enmargin = 100;
         const jumpv = 20;
+        const notes = {
+            "C": 261.63,
+            "D": 293.66,
+            "E": 329.63,
+            "F": 349.23,
+            "G": 392.00,
+            "A": 440.00,
+            "B": 493.88,
+            "C5": 523.25 
+
+        };
+        let thingy = false;
         let touchingstar = false;
         let points = 0;
         let count = 0;
@@ -19,6 +31,7 @@
         //let enemy = {width: 100, height: 100, x: innerWidth + 100, y: innerHeight, type: ""};
         let enemies = [{width: 200, height: 100, x: innerWidth + Math.random()*1000, y: Math.random()*(innerHeight-100), type: ""}, {width: 200, height: 50, x: innerWidth + Math.random()*4000, y: Math.random()*(innerHeight-50), type: ""}, {width: 100, height: 200, x: innerWidth + Math.random()*300, y: innerHeight-100, type: ""}, {width: 300, height: 50, x: innerWidth + Math.random()*10000, y: Math.random()*(innerHeight-50), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*20000, y: Math.random()*(innerHeight-150), type: ""}, {width: 50, height: 150, x: innerWidth + Math.random()*500, y: Math.random()*(innerHeight-150), type: "star"}];
         const playagain = {x: innerWidth/2, y: innerHeight/2 + 50, width: 200, height: 100};
+        // CHANGE THIS TO CHANGE GAME SPEED
         const speed = 500;
         //this is the cool drawing function
         function draw(time) {
@@ -26,6 +39,8 @@
             ctx.fillRect(0, 0, innerWidth, innerHeight);
             ctx.fillStyle = "red";
             ctx.fillRect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = "grey";
+                ctx.fillRect(player.x-40, player.y, 40, player.height);
             for (let i in enemies) {
                 ctx.fillStyle = "red";
                 const enemy = enemies[i];
@@ -33,13 +48,22 @@
                 if (enemy.type == "star") {
                     ctx.fillStyle = "yellow";
                 }
-                
+                const topspikes = Math.floor(enemy.width/10);
+                const sideSpikes = Math.floor(enemy.height/10);
+                for (let i = 0; i < topspikes; i++) {
+                    ctx.fillRect(enemy.x + 10 * i, enemy.y-10, 3, 10);
+                    ctx.fillRect(enemy.x + 10 * i, enemy.y+enemy.height, 3, 10);
+                }
+                for (let i = 0; i < sideSpikes; i++) {
+                    ctx.fillRect(enemy.x-10, enemy.y + 10*i, 10, 3);
+                }
                 ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-                ctx.fillStyle = "red";
-                ctx.font = "bold 48px serif";
+                /*ctx.fillStyle = "red";
+                ctx.font = "bold 48px serif";*/
+                /*
                 if (enemy.type != "star") {
                     ctx.fillText("(:<", enemy.x, enemy.y+50);
-                }
+                }*/
                 ctx.font = "48px serif";
             }
             ctx.fillStyle = "black";
@@ -49,7 +73,12 @@
             ctx.fillRect(player.x+player.width-7, player.y, 7, 7);
             ctx.fillRect(player.x, player.y+player.height-7, 7, 7);
             ctx.fillRect(player.x+player.width-7, player.y+player.height-7, 7, 7);
-
+            if (thingy) {
+                
+                ctx.fillStyle = "orange";
+                ctx.fillRect(player.x-40, player.y+player.height, 40, 50);
+                ctx.fillRect(player.x-30, player.y + player.height+50, 20, 30);
+            }
             if (gameState == "end") {
                 ctx.fillStyle = "black";
                 ctx.fillRect(0, 0, innerWidth, innerHeight);
@@ -57,7 +86,7 @@
                 ctx.font = "48px serif";
                 ctx.fillText("Oops.", innerWidth/2, innerHeight/2);
                 ctx.fillStyle = "white";
-                ctx.fillRect(playagain.x, playagain.y, playagain.width, playagain.height);
+                ctx.fillRect(innerWidth/2, innerHeight/2+50, playagain.width, playagain.height);
                 ctx.fillStyle = "red";
                 ctx.font = "30px serif";
                 ctx.fillText("Play again", innerWidth/2, innerHeight/2+100);
@@ -127,7 +156,7 @@
                 quota = 0;
                 player.y -= 10;
                 
-                player.upv *= -4/5;
+                player.upv *= -2/3;
                 player.y = innerHeight - player.height;
                 
             } else if (player.y < 0) {
@@ -154,6 +183,7 @@
        }
         window.addEventListener('keydown', (event) => {
             if (event.code == 'Space' || event.code == 'KeyW' || event.code == 'ArrowUp') {
+                thingy = true;
                 if (gameState == "playing") event.preventDefault();
                 if (gameState == "end") location.reload();
                 space = false;
@@ -171,6 +201,7 @@
         window.addEventListener('keyup', (event) => {
              if (event.code == 'Space' || event.code == 'KeyW' || event.code == 'ArrowUp') {
                 down = false;
+                thingy = false;
             }
         });
         window.addEventListener('click', (event) => {
