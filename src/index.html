@@ -90,8 +90,6 @@
                 ctx.fillText("space/w/up/click", innerWidth/2, innerHeight/2);
             }
             ctx.fillStyle = "white";
-            const high = localStorage.getItem("score");
-            ctx.fillText(high, 100, 50);
             ctx.fillText(points, 50, 50);
             
         }
@@ -125,9 +123,6 @@
                 if (enemy.type == "star") {
                     if (!touchingstar) {
                         points++;
-                        if (points > localStorage.getItem("score")) {
-                            localStorage.setItem("score", points);
-                        }
                         touchingstar = true;
                         enemy.x = innerWidth + Math.random()*500;
                     }
